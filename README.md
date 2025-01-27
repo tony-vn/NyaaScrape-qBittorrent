@@ -50,7 +50,7 @@ Additionally, several flags are available:
 `python NyaaScrape-qBittorrent.py --update 5812b0b5b57f4c4bc814e4ad40a628dd9176d533`
 
 ### Update Considerations:
-- Add proper table parsing for cached pages from animetosho.org mirroring the nyaa pages
+- Add proper table parsing for cached pages from animetosho like it exists for nyaa pages
 - Refactor code
 - Add intuitive (less technical) customizability for end-users (e.g. allow users a way to specify scraping the same page twice without needing to delete the entry in the downloads.txt)
 - Provide non-Windows OSes support
