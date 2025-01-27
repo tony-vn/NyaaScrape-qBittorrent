@@ -23,9 +23,11 @@ A record of pages scraped is kept in a file located in the same directory as the
 ### Prerequisites:
 For non-Windows users, the following Python modules are required: bs4, requests, sys, os, pandas, tabulate, selenium, re, textwrap, shutil and glob.
 <BR><BR>
-Note: the filenames of the generated text files are Windows filename compliant, but were not checked to be compliant for macOS and Linux filename systems. Whether this program works for these OSes is unclear.
+Note: the filenames of the generated text files are Windows filename compliant, but were not checked to be compliant for macOS and Linux filename systems. Thus, this script/executable is unlikely to work for these OSes.
 
 ### Setup:
+Download the release executable and place it executable anywhere.
+<BR><BR>
 In the settings of qBittorrent: Options -> Downloads -> Run external program -> Run on torrent finished
 <BR><BR>
 Check "Run on torrent finished", then add the line: `"path/to/executable/NyaaScrape-qBittorrent.exe" "%G" "%I" "%N" "%D" "%F" "%R"`
