@@ -38,12 +38,16 @@ The files will be saved in a folder located in the same directory as the script 
 Additionally, several flags are available:
 - `--no-list`: scrapes the web page, ignoring downloaded.txt, but will do nothing if the file already exists in the readmes directory
 - `--write-new`: scrapes the web page but only if it is not recorded in the downloaded.txt, records it in downloaded.txt, and if another copy exists in readmes, it will rename
-- `--update`: scrapes web page, add to downloaded.txt, and renames file if another copy exists in readmes
+- `--update`: scrapes web page, add to downloaded.txt, and renames file if another copy exists in readmes (probably what you want to use in most cases).
 <BR><BR>
-No order on flags and URLs
+No order on flags or URLs
 <BR><BR>
-#### General Script Run:
+
+#### Examples:
+##### General:
 `python NyaaScrape-qBittorrent.py <--flags> <infohash_here>`
+##### Specific:
+`python NyaaScrape-qBittorrent.py --update 5812b0b5b57f4c4bc814e4ad40a628dd9176d533`
 
 ### Update Considerations:
 - Add proper table parsing for cached pages from animetosho.org mirroring the nyaa pages
