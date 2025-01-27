@@ -51,6 +51,7 @@ Additionally, several flags are available:
 
 ### Update Considerations:
 - Add proper table parsing for cached pages from animetosho like it exists for nyaa pages
+- Optimize and reduce file size
 - Refactor code
 - Add intuitive (less technical) customizability for end-users (e.g. allow users a way to specify scraping the same page twice without needing to delete the entry in the downloads.txt)
 - Provide non-Windows OSes support
