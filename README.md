@@ -2,7 +2,7 @@
 ********************************
 
 ### Description:
-A simple script packaged into an executable that scrapes the download page of the site, writes the information from the page to a text file, and saves that text file at the location of the download. 
+A simple script packaged into an executable that scrapes the download page of the site, writes the information from the page to a text file, and saves that text file at the location of the download. It attempt to scrape the nyaa page, and if that is unavailable, it will then try to scrape the cached nyaa page through animetosho.
 <BR><BR>
 Useful for providing a quick way to refer back to the torrent for details if the author included any, if the torrent is ever taken down, or if you want to know the particular date of the release in case you want to update to something newer.
 <BR><BR>
