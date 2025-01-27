@@ -40,7 +40,7 @@ Additionally, several flags are available:
 - `--write-new`: scrapes the web page but only if it is not recorded in the downloaded.txt, records it in downloaded.txt, and if another copy exists in readmes, it will rename
 - `--update`: scrapes web page, add to downloaded.txt, and renames file if another copy exists in readmes (probably what you want to use in most cases).
 <BR><BR>
-No order on flags or URLs
+*No order on flags or URLs
 <BR><BR>
 
 #### Examples:
