@@ -30,8 +30,8 @@ In the settings of qBittorrent: Options -> Downloads -> Run external program -> 
 <BR><BR>
 Check "Run on torrent finished", then add the line: `"path/to/executable/NyaaScrape-qBittorrent.exe" "%G" "%I" "%N" "%D" "%F" "%R"`
 
-### Additional Information:
-Users who want to scrape nyaa.si pages without qBittorrent can still do so by using the python file (from src folder) as a script. They must provide as arguments infohashes of the torrent when calling the script (multiple infohashes supported) for the torrent pages they want to scrape from.
+### Non-qBittorrent Use:
+Users who want to scrape nyaa.si pages without qBittorrent can do so by using the python file (from src folder) as a script. They must provide as arguments infohashes of the torrent when calling the script (multiple infohashes supported) for the torrent pages they want to scrape from.
 <BR><BR>
 The files will be saved in a folder located in the same directory as the script called readmes.
 <BR><BR>
