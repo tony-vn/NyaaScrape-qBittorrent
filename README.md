@@ -45,7 +45,7 @@ No order on flags or URLs
 
 #### Examples:
 ##### General:
-`python NyaaScrape-qBittorrent.py <--flags> <infohash_here>`
+`python NyaaScrape-qBittorrent.py <flags> <infohash_here>`
 ##### Specific:
 `python NyaaScrape-qBittorrent.py --update 5812b0b5b57f4c4bc814e4ad40a628dd9176d533`
 
