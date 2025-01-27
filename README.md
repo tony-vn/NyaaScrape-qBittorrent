@@ -30,14 +30,6 @@ In the settings of qBittorrent: Options -> Downloads -> Run external program -> 
 <BR><BR>
 Check "Run on torrent finished", then add the line: "path/to/executable/NyaaScrape-qBittorrent.exe" "%G" "%I" "%N" "%D" "%F" "%R"
 
-### Update Considerations:
-- Add proper table parsing for cached pages from animetosho.org mirroring the nyaa pages
-- Refactor code
-- Add intuitive (less technical) customizability for end-users (e.g. allow users a way to specify scraping the same page twice without needing to delete the entry in the downloads.txt)
-- Provide non-Windows OSes support
-- Fix possible logical errors regarding flags
-- Add robustness to code
-
 ### Additional Information:
 Users who want to scrape nyaa.si pages without qBittorrent can still do so by using the python file (from src folder) as a script. They must provide as arguments infohashes of the torrent when calling the script (multiple infohashes supported) for the torrent pages they want to scrape from.
 <BR><BR>
@@ -50,5 +42,19 @@ Additionally, several flags are available:
 <BR><BR>
 No order on flags and URLs
 <BR><BR>
-  #### General Script Run:
-  `python NyaaScrape-qBittorrent.py <--flags> <infohash_here>`
+#### General Script Run:
+`python NyaaScrape-qBittorrent.py <--flags> <infohash_here>`
+
+### Update Considerations:
+- Add proper table parsing for cached pages from animetosho.org mirroring the nyaa pages
+- Refactor code
+- Add intuitive (less technical) customizability for end-users (e.g. allow users a way to specify scraping the same page twice without needing to delete the entry in the downloads.txt)
+- Provide non-Windows OSes support
+- Fix possible logical errors regarding flags
+- Add robustness to code
+
+
+
+
+
+
