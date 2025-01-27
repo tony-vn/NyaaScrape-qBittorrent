@@ -28,7 +28,7 @@ Note: the filenames of the generated text files are Windows filename compliant, 
 ### Setup:
 In the settings of qBittorrent: Options -> Downloads -> Run external program -> Run on torrent finished
 <BR><BR>
-Check "Run on torrent finished", then add the line: "path/to/executable/NyaaScrape-qBittorrent.exe" "%G" "%I" "%N" "%D" "%F" "%R"
+Check "Run on torrent finished", then add the line: `"path/to/executable/NyaaScrape-qBittorrent.exe" "%G" "%I" "%N" "%D" "%F" "%R"`
 
 ### Additional Information:
 Users who want to scrape nyaa.si pages without qBittorrent can still do so by using the python file (from src folder) as a script. They must provide as arguments infohashes of the torrent when calling the script (multiple infohashes supported) for the torrent pages they want to scrape from.
