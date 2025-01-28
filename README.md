@@ -57,7 +57,7 @@ Additionally, several flags are available:
 - Provide non-Windows OSes support
 - Fix possible logical errors regarding flags
 - Add robustness to code
-
+- Integrating proper sentiment analysis to filter for useful, constructive comments
 
 
 
