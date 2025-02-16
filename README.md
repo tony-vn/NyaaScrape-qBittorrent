@@ -3,7 +3,7 @@
 
 ### Description:
 A simple script packaged into an executable that scrapes the download page of a site, extracts information from the page, and writes it to a text file saved in the same location as the downloaded file. The script/executable first attempts to scrape the Nyaa page. If that is unavailable, it falls back to scraping the cached Nyaa page through AnimeTosho. 
-<BR>
+<BR><BR>
 This program is useful for quickly referencing torrent details provided by the author from file explorer and ensuring torrent details is kept in the event the web page is taken down. Users who wish to archive or hoard data will find the most utility from this.
 <BR><BR>
 What information does this executable scrape?
