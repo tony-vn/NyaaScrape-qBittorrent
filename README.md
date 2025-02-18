@@ -21,10 +21,9 @@ What information does this executable scrape?
 A record of pages scraped is kept in a file located in the same directory as the executable called "downloads.txt". This acts as a record of torrents you've downloaded. If you want to scrape the same page again, you will have to manually find the record from this text file and delete its entry. This is quite trivial albeit a little tedious to do, but it is as simple as finding the record (kept per line) and deleting it.
 
 ## Prerequisites:
-For non-Windows users, the following Python modules are required: bs4, requests, sys, os, pandas, tabulate, selenium, re, textwrap, shutil and glob.
+The following Python modules are required: bs4, requests, sys, os, pandas, tabulate, selenium, re, textwrap, shutil and glob, if choosing to use as this as a script only.
 <BR><BR>
-Note: the filenames of the generated text files are Windows filename compliant, but were not checked to be compliant for macOS and Linux filename systems. Thus, this script/executable is unlikely to work for these OSes.
-
+Note to non-Windows users: the filenames of the generated text files are Windows filename compliant, but were not checked to be compliant for macOS and Linux filename systems.
 ## Setup:
 Download the release executable and place it executable anywhere.
 <BR><BR>
