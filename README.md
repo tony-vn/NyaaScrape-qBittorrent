@@ -49,6 +49,12 @@ Additionally, several flags are available:
 `python NyaaScrape-qBittorrent.py <flags> <infohash_here>`
 #### Specific:
 `python NyaaScrape-qBittorrent.py --update 5812b0b5b57f4c4bc814e4ad40a628dd9176d533`
+<BR><BR>
+## Example of Table Conversion From HTML to Plain Text:
+  ##### <ins>Input:</ins>
+![InputHTMLPage](imgs/nyaa_table2.png)
+  ##### <ins>Output:</ins>
+![OutputText](imgs/nyaaa_tabletext2.png)
 
 ## Update Considerations:
 - Add proper table parsing for cached pages from animetosho like it exists for nyaa pages
