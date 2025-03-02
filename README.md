@@ -55,9 +55,9 @@ Additionally, several flags are available:
 
 ## Examples:
 #### General:
-`python NyaaScrape-qBittorrent.py <flags> <infohash_here>`
+`python main.py <flags> <infohash_here>`
 #### Specific:
-`python NyaaScrape-qBittorrent.py --update 5812b0b5b57f4c4bc814e4ad40a628dd9176d533`
+`python main.py --update 5812b0b5b57f4c4bc814e4ad40a628dd9176d533`
 <BR><BR>
 ## Example of Table Conversion From HTML to Plain Text:
   ##### <ins>Input:</ins>
