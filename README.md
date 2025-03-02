@@ -21,6 +21,7 @@ What information does this executable scrape?
 A record of pages scraped is kept in a file located in the same directory as the executable called "downloads.txt". This acts as a record of torrents you've downloaded. If you want to scrape the same page again, you will have to manually find the record from this text file and delete its entry. This is quite trivial albeit a little tedious to do, but it is as simple as finding the record (kept per line) and deleting it.
 
 ## Prerequisites:
+To users using it as a script, requirements:
 ```beautifulsoup4==4.13.3
 joblib==1.2.0
 numpy==2.2.3
