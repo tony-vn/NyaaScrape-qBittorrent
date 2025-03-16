@@ -56,7 +56,7 @@ Additionally, several flags are available:
 
 ## Examples:
 #### General:
-`python main.py <flags> <infohash_here>`
+`python main.py <flags> <infohash_here>` or `python main.py <infohash_here> <flags>`
 #### Specific:
 `python main.py --update 5812b0b5b57f4c4bc814e4ad40a628dd9176d533`
 <BR><BR>
