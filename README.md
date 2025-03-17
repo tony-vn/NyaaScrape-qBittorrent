@@ -1,5 +1,5 @@
 # NyaaScrape-qBittorrent
-********************************
+<!--********************************-->
 
 ## :pushpin: Overview:
 NyaaScrape-qBittorrent is a Python-based tool that saves the information of a **Nyaa.si** page in a text file in the same location of the torrented files for easy tracking of information of a particular downloaded release.
