@@ -26,14 +26,7 @@ What information does this executable scrape?
 - Description
 - URL of the page
 - All comments
-<BR><BR>
 
-## :pencil2: Usage Notes:
-A record of pages scraped is kept in a file located in the same directory as the executable called "downloads.txt". This acts as a record of torrents you've downloaded. <BR>
-
-If you want to scrape the same page again, you will have to manually find the line from this text file and delete it.
-<BR><BR>
-Note to non-Windows users: the filenames of the generated text files are Windows filename compliant, but were not checked to be compliant for macOS and Linux filename systems.
 ## :wrench: Setup:
 ### Option A: Executable
 Download the release executable [here](https://github.com/tony-vn/NyaaScrape-qBittorrent/releases) and place it anywhere.
@@ -64,6 +57,13 @@ Additionally, several flags are available:
 <kbd>![InputHTMLPage](imgs/nyaa_table2.png)</kbd>
   #### <ins>Output:</ins>
 <kbd>![OutputText](imgs/nyaaa_tabletext2.png)</kbd>
+
+## :pencil2: Usage Notes:
+A record of pages scraped is kept in a file located in the same directory as the executable called "downloads.txt". This acts as a record of torrents you've downloaded. <BR>
+
+If you want to scrape the same page again, you will have to manually find the line from this text file and delete it.
+<BR><BR>
+Note to non-Windows users: the filenames of the generated text files are Windows filename compliant, but were not checked to be compliant for macOS and Linux filename systems.
 
 ## :memo: Update Considerations:
 - Add proper table parsing for cached pages from animetosho like it exists for nyaa pages
