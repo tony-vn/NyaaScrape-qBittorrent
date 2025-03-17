@@ -31,14 +31,14 @@ What information does this executable scrape?
 ## :pencil2: Usage Notes:
 A record of pages scraped is kept in a file located in the same directory as the executable called "downloads.txt". This acts as a record of torrents you've downloaded. <BR>
 
-If you want to scrape the same page again, you will have to manually find the record from this text file and delete its entry. This is quite trivial albeit a little tedious to do, but it is as simple as finding the record (kept per line) and deleting it.
+If you want to scrape the same page again, you will have to manually find the line from this text file and delete it.
 <BR><BR>
 Note to non-Windows users: the filenames of the generated text files are Windows filename compliant, but were not checked to be compliant for macOS and Linux filename systems.
 ## :wrench: Setup:
 ### Option A: Executable
 Download the release executable [here](https://github.com/tony-vn/NyaaScrape-qBittorrent/releases) and place it anywhere.
 <BR><BR>
-In the settings of qBittorrent: Options -> Downloads -> Run external program -> Run on torrent finished
+In the settings of qBittorrent: `Options -> Downloads -> Run external program -> Run on torrent finished`
 <BR><BR>
 Check "Run on torrent finished", then add the line: `"path/to/executable/NyaaScrape-qBittorrent.exe" "%G" "%I" "%N" "%D" "%F" "%R"`
 ### Option B: Python Script
