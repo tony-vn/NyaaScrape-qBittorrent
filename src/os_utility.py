@@ -20,10 +20,20 @@ readmes_folder_path = readmes_folder_path.replace(os.sep, '/')
 
 # make file if it does not exist
 if not os.path.exists(readmes_folder_path):
-    os.makedirs(readmes_folder_path)
+    try:
+        if len(readmes_folder_path) > 256 - len("\readmes"):
+            raise Exception("Readmes path is too long. Path you've placed the executable or scripts in is too long. Try something less than 256.")
+        os.makedirs(readmes_folder_path)
+    except Exception as e:
+        print(e)
 if not os.path.exists(download_txt_file_path):
-    downloaded_list = open(download_txt_file_path, 'x', encoding="utf-8")
-    downloaded_list.close()
+    try:
+        if len(download_txt_file_path) > 256 - len("\downloaded.txt"):
+            raise Exception("Downloaded.txt path is too long. Path you've placed the executable or scripts in is too long. Try something less than 256.")
+        downloaded_list = open(download_txt_file_path, 'x', encoding="utf-8")
+        downloaded_list.close()
+    except Exception as e:
+        print(e)
     
 '''r for raw string; '\\'' interpreted as '\' however since '\' is the escape character in python, os.sep finds what
 your os uses as separator for its path and replaces it with the char in the second argument'''
@@ -77,30 +87,39 @@ def move_file_function(readmes_folder_path: str, file_name: str) -> None:
     """
     arg_6 = sys.argv[6].split('\\')
     text_file_name = file_name.replace(os.sep, '/').split('/')[-1]
+    destination_path = ""
+    single_file_path = ""
+
     if sys.argv[6] == "": # is a "single file" w/ no subfolder so create one
-        destination_path = sys.argv[5][:-sys.argv[5][::-1].index('.') - 1].replace(os.sep, '/')
-        os.makedirs(destination_path)
-        media_file_path = sys.argv[5].replace(os.sep, '/')
-        shutil.move(media_file_path, destination_path)
-        shutil.move("{}/{}".format(readmes_folder_path, text_file_name), destination_path)
-        print('is a "single file" w/ no subfolder so create one')
-        print('media file path: '+ media_file_path)
-        print('destination_path: ' + destination_path)
-        print('text file path: ' + "{}/{}".format(readmes_folder_path, text_file_name))
-        print('destination_path: ' + destination_path)
+        destination_path = sys.argv[5][:-sys.argv[5][::-1].index('.') - 1].replace(os.sep, '/') # backwards negative slice index minus one for before '.'
+        single_file_path = sys.argv[5].replace(os.sep, '/') # folder name of folder to create
+
+        # print('is a "single file" w/ no subfolder so create one')
+        # print('media file path: '+ media_file_path)
+        # print('destination_path: ' + destination_path)
+        # print('text file path: ' + "{}/{}".format(readmes_folder_path, text_file_name))
+        # print('destination_path: ' + destination_path)
     elif not containsDuplicate(arg_6): # is a "single file" with a created subfolder from qbittorrent
         destination_path = sys.argv[6].replace(os.sep, '/')
-        shutil.move("{}/{}".format(readmes_folder_path, text_file_name), destination_path)
-        print('is a "single file" w/ subfolder')
-        print('text file path: ' + "{}/{}".format(readmes_folder_path, text_file_name))
-        print('destination_path: ' + destination_path)
+        # print('is a "single file" w/ subfolder')
+        # print('text file path: ' + "{}/{}".format(readmes_folder_path, text_file_name))
+        # print('destination_path: ' + destination_path)
     elif containsDuplicate(arg_6):
         destination_path = sys.argv[4].replace(os.sep, '/')
-        shutil.move("{}/{}".format(readmes_folder_path, text_file_name), destination_path)
-        print('is folder')
-        print('text file path: ' + "{}/{}".format(readmes_folder_path, text_file_name))
-        print('destination_path: ' + destination_path)
+        # print('is folder')
+        # print('text file path: ' + "{}/{}".format(readmes_folder_path, text_file_name))
+        # print('destination_path: ' + destination_path)
 
+    # validate destination path length
+    try:
+        if len(destination_path) > 256 - len(single_file_path):
+            raise Exception("Destination path is too long. Try something less than 256.")
+        if len(single_file_path) != 0:
+            os.makedirs(destination_path)  # create new folder
+            shutil.move(single_file_path, destination_path)  # move newly created folder
+        shutil.move("{}/{}".format(readmes_folder_path, text_file_name), destination_path)  # move file
+    except Exception as e:
+        print(e)
 
     # destination_path = sys.argv[6].replace(os.sep, '/')
     # print("In move function, this is dest path 1 = " + destination_path)
@@ -224,7 +243,7 @@ def truncate_title(cleaned_title: str, file_title: str) -> str:
         while i < len(cleaned_title) and len(trunked_title) <= (256 - len(file_title) - 38):
             word += cleaned_title[i]
 
-            # Add word to trunked_title. Word defined as ending in clos brackets or a space
+            # Add to trunked_title word-by-word. Word defined as ending in clos brackets or a space
             if cleaned_title[i] in '])】』' or cleaned_title[i] == ' ' and open_brackets is False:
                 trunked_title += word
                 word = ""
@@ -232,5 +251,5 @@ def truncate_title(cleaned_title: str, file_title: str) -> str:
                 open_brackets = True
             i += 1
 
-    trunked_title = re.sub(r'\s$|[,.\-_+]$', r'', trunked_title)
+    trunked_title = re.sub(r'\s$|[,.\-_+]$', r'', trunked_title) # Remove invalid windows characters in filename
     return trunked_title

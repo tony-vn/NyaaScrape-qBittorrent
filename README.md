@@ -80,7 +80,7 @@ Please report any issues!
 
 ## :page_with_curl: License
 ```
-Copyright (c) 2025 Tony N
+Copyright (c) 2025 Tony N.
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation files (the "Software"),
