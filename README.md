@@ -45,7 +45,7 @@ Additionally, several flags are available:
 - `--write-new`: scrapes the web page but only if it is not recorded in the downloaded.txt, records it in downloaded.txt, and if another copy exists in readmes, it will rename.
 - `--update`: scrapes web page, add to downloaded.txt, and renames file if another copy exists in readmes (probably what you want to use in most cases).
 - <ins>**NEW:**</ins> `--torrent-dir <directory>`: specify the location of where your downloaded torrent files are located and the script will scrape their web pages, automatically moving the text file to the location of their downloaded files.
-  - `--infohash`: reads infohashes from infohash.txt located in the current script directory. One infohash per line. Meant to be used with `--torrent-dir` for batch creation of text files for torrents already downloaded and existing on your drive.
+  - `--infohash`: reads infohashes from infohash.txt located in the current script directory. One infohash per line. Meant to be used as an auxiliary flag for batch creation of text files for torrents already downloaded and existing on your drive.
 <BR><BR>
 #### Examples:
 ##### General:
