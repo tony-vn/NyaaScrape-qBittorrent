@@ -5,19 +5,21 @@
 NyaaScrape-qBittorrent is a Python-based tool that saves the information of a **Nyaa.si** page in a text file in the same location of the torrented files for easy tracking of information of a particular downloaded release.
 
 ## :rocket: Features:
-- Saves information from a Nyaa page automatically through qBittorrent's `Run on download finished` event.
+- Saves information from a Nyaa page automatically through qBittorrent's `Run on torrent finished` event.
 - Scrapes **hidden** Nyaa pages
 - Preserves **tables** and **all links** in text file.
 - Allows users to easily access information of a particular torrent release through a text file next to their torrented files.
 - Saves downloaded torrents in `downloaded.txt`.
 - Available as an **executable** and an **open-source Python script(s)**.
+- **NEW:** Scrape the Nyaa pages of torrents already downloaded (script only)
+- **NEW:** Download Nyaa pages
 
 ## :book: Description:
-A script packaged into an executable that scrapes the download page of [Nyaa.si](https://nyaa.si/), extracts information from the page, and writes it to a text file saved in the same location as the downloaded file. The script/executable first attempts to scrape the Nyaa pages. If that is unavailable, it falls back to scraping the cached Nyaa page through AnimeTosho. 
+A script packaged into an executable that scrapes the download page of [Nyaa.si](https://nyaa.si/), extracts information from the page, and writes it to a text file saved in the same location as the downloaded file. The script/executable first attempts to scrape the Nyaa pages. If that is unavailable, it falls back to scraping the cached Nyaa page through **AnimeTosho.** 
 <BR><BR>
-This program is useful for quickly referencing torrent details provided by the author from file explorer and ensuring torrent details is retained on your local machine in the event the web page is taken down. Users who wish to archive or hoard data will find the most utility from this.
+This program is useful for being able to quickly reference torrent details provided by the torrent uploader from file explorer and ensuring torrent details is retained on your local machine in the event the web page is taken down. Users who archive or hoard data will find the most utility from this.
 <BR><BR>
-What information does this executable scrape?
+What **information** does this executable scrape?
 - Title
 - Date
 - Submitter
@@ -40,16 +42,19 @@ When calling the script main.py (located in src folder), provide as arguments th
 The files will be saved in a folder located in the **same directory** as the script called readmes.
 <BR><BR>
 Additionally, several flags are available:
-- `--no-list`: scrapes the web page, ignoring downloaded.txt, but will do nothing if the file already exists in the readmes directory
-- `--write-new`: scrapes the web page but only if it is not recorded in the downloaded.txt, records it in downloaded.txt, and if another copy exists in readmes, it will rename
+- `--no-list`: scrapes the web page, ignoring downloaded.txt, but will do nothing if the file already exists in the readmes directory.
+- `--write-new`: scrapes the web page but only if it is not recorded in the downloaded.txt, records it in downloaded.txt, and if another copy exists in readmes, it will rename.
 - `--update`: scrapes web page, add to downloaded.txt, and renames file if another copy exists in readmes (probably what you want to use in most cases).
-<BR><BR>
-*No order on flags or URLs
+- **NEW:** `--torrent-dir <directory>`: specify location where your torrents are located, scrapes their web pages, automatically moving the text file to the downloaded files.
+- **NEW:** `--infohash`: reads infohashes from infohash.txt in the current script directory (for copying and pasting torrent infohashes from qBittorrent).
+<BR>
+*No order on flags or infohashes
 #### Examples:
 ##### General:
-`python main.py <flags> <infohash_here>` OR `python main.py <infohash_here> <flags>`
+`python main.py <flags> <infohash_here>`
 ##### Specific:
 `python main.py --update 5812b0b5b57f4c4bc814e4ad40a628dd9176d533`
+`python main.py --torrent-dir "I:\Anime" --update --infohash`
 <BR><BR>
 
 ## :white_check_mark: Sample:
@@ -66,17 +71,17 @@ If you want to scrape the same page again, you will have to manually find the li
 Note to non-Windows users: the filenames of the generated text files are Windows filename compliant, but were not checked to be compliant for macOS and Linux filename systems.
 
 ## :memo: Update Considerations:
-- Add proper table parsing for cached pages from animetosho like it exists for nyaa pages
+- Add table parsing for cached pages from animetosho like it exists for nyaa pages
 - Optimize and reduce executable file size
 - Refactor code
 - Add intuitive (less technical) customizability for end-users (e.g. allow users a way to specify scraping the same page twice without needing to delete the entry in the downloads.txt)
-- Non-Windows OSes support
+- Non-Windows OS support
 - Fix possible logical errors regarding flags
-- Add robustness to code
-- Integrating proper sentiment analysis to filter for useful, constructive comments
+- Add code robustness
+- Integrate proper sentiment analysis to filter for useful, constructive comments
 
 ## :triangular_flag_on_post: Problems:
-Please report any issues!
+Please feel free to report any issues!
 
 ## :page_with_curl: License
 ```
