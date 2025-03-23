@@ -11,8 +11,8 @@ NyaaScrape-qBittorrent is a Python-based tool that saves the information of a **
 - Allows users to easily access information of a particular torrent release through a text file next to their torrented files.
 - Saves downloaded torrents in `downloaded.txt`.
 - Available as an **executable** and an **open-source Python script(s)**.
-- **NEW:** Scrape the Nyaa pages of torrents already downloaded (script only)
-- **NEW:** Download Nyaa pages
+- <ins>**NEW:**</ins> Scrape the Nyaa pages of torrents already downloaded (script only)
+- <ins>**NEW:**</ins> Download Nyaa pages
 
 ## :book: Description:
 A script packaged into an executable that scrapes the download page of [Nyaa.si](https://nyaa.si/), extracts information from the page, and writes it to a text file saved in the same location as the downloaded file. The script/executable first attempts to scrape the Nyaa pages. If that is unavailable, it falls back to scraping the cached Nyaa page through **AnimeTosho.** 
@@ -45,15 +45,15 @@ Additionally, several flags are available:
 - `--no-list`: scrapes the web page, ignoring downloaded.txt, but will do nothing if the file already exists in the readmes directory.
 - `--write-new`: scrapes the web page but only if it is not recorded in the downloaded.txt, records it in downloaded.txt, and if another copy exists in readmes, it will rename.
 - `--update`: scrapes web page, add to downloaded.txt, and renames file if another copy exists in readmes (probably what you want to use in most cases).
-- **NEW:** `--torrent-dir <directory>`: specify location where your torrents are located, scrapes their web pages, automatically moving the text file to the downloaded files.
-- **NEW:** `--infohash`: reads infohashes from infohash.txt in the current script directory (for copying and pasting torrent infohashes from qBittorrent).
+- <ins>**NEW:**</ins> `--torrent-dir <directory>`: specify location where your torrents are located, scrapes their web pages, automatically moving the text file to the downloaded files.
+- <ins>**NEW:**</ins> `--infohash`: reads infohashes from infohash.txt in the current script directory (for copying and pasting torrent infohashes from qBittorrent).
 <BR><BR>
 *No order on flags or infohashes
 #### Examples:
 ##### General:
 `python main.py <flags> <infohash_here>`
 ##### Specific:
-`python main.py --update 5812b0b5b57f4c4bc814e4ad40a628dd9176d533`
+`python main.py --update 5812b0b5b57f4c4bc814e4ad40a628dd9176d533`<BR>
 `python main.py --torrent-dir "I:\Anime" --update --infohash`
 <BR><BR>
 
