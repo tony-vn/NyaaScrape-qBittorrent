@@ -1,5 +1,5 @@
 
-global_flags = {'--no-list': False, '--write-new': False, '--update': False, '--text-only': False, '--infohash': False}
+global_flags = {'--no-list': False, '--write-new': False, '--update': False, '--torrent-dir': False, '--infohash': False}
 
 torrentdir_fullpath = ""
 
