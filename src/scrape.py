@@ -192,6 +192,8 @@ def find_content(url_passed: str, soup: bs4.BeautifulSoup):
                     gv.torrentdir_fullpath = gv.torrentdir_fullpath + "\\{}".format(foldername)
                     gv.torrentdir_fullpath = gv.torrentdir_fullpath.replace(os.sep, '/')
                     # print("This is the torrentdir_fullpath in scrape", gv.torrentdir_fullpath)
+                    if not os.path.isdir(gv.torrentdir_fullpath):
+                        gv.torrentdir_fullpath = gv.torrentdir_fullpath[:gv.torrentdir_fullpath.rindex('/')] # download folder does not exist in --torrent-dir, make fullpath --torrent-dir
                     break
     elif gv.open_sites[1] in url_passed:
         soup = main.load_js(url_passed)
