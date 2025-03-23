@@ -79,6 +79,8 @@ Note to non-Windows users: the filenames of the generated text files are Windows
 - Integrate proper sentiment analysis to filter for useful, constructive comments
 
 ## :triangular_flag_on_post: Problems:
+Since this program relies on internet https requests, if you run into issues, double check your internet connection and speed. Slow VPNs or alternative DNS's may need to be turned off.
+
 Please feel free to report any issues!
 
 ## :page_with_curl: License
