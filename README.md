@@ -47,7 +47,7 @@ Additionally, several flags are available:
 - `--update`: scrapes web page, add to downloaded.txt, and renames file if another copy exists in readmes (probably what you want to use in most cases).
 - **NEW:** `--torrent-dir <directory>`: specify location where your torrents are located, scrapes their web pages, automatically moving the text file to the downloaded files.
 - **NEW:** `--infohash`: reads infohashes from infohash.txt in the current script directory (for copying and pasting torrent infohashes from qBittorrent).
-<BR>
+<BR><BR>
 *No order on flags or infohashes
 #### Examples:
 ##### General:
