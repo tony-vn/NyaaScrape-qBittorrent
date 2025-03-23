@@ -1,9 +1,11 @@
 import glob
-from main import *
+import main
 import sys
 import os
 import shutil
 import re
+import bs4
+import global_variables as gv
 
 if sys.argv[0][-4:] == '.exe':
     exe_path = sys.executable  # Path to the actual .exe if frozen, otherwise Python interpreter
@@ -15,20 +17,20 @@ exe_dir = os.path.dirname(exe_path)
 download_txt_file_path = exe_dir + "\\downloaded.txt"
 download_txt_file_path = download_txt_file_path.replace(os.sep, '/')
 
-readmes_folder_path = exe_dir + "\\readmes"
+readmes_folder_path = exe_dir + "\\readmes\\"
 readmes_folder_path = readmes_folder_path.replace(os.sep, '/')
 
 # make file if it does not exist
 if not os.path.exists(readmes_folder_path):
     try:
-        if len(readmes_folder_path) > 256 - len("\readmes"):
+        if len(readmes_folder_path) + len("\\readmes") > 256:
             raise Exception("Readmes path is too long. Path you've placed the executable or scripts in is too long. Try something less than 256.")
         os.makedirs(readmes_folder_path)
     except Exception as e:
         print(e)
 if not os.path.exists(download_txt_file_path):
     try:
-        if len(download_txt_file_path) > 256 - len("\downloaded.txt"):
+        if len(download_txt_file_path) + len("\\downloaded.txt") > 256:
             raise Exception("Downloaded.txt path is too long. Path you've placed the executable or scripts in is too long. Try something less than 256.")
         downloaded_list = open(download_txt_file_path, 'x', encoding="utf-8")
         downloaded_list.close()
@@ -40,17 +42,17 @@ your os uses as separator for its path and replaces it with the char in the seco
 
 def is_downloaded(url: str) -> bool:
     downloaded_list_alias = open(download_txt_file_path, 'r', encoding="utf-8")
-    text_content = downloaded_list_alias.readlines() # https://www.pythontutorial.net/python-basics/python-read-text-file/
+    text_content = downloaded_list_alias.readlines()
     downloaded_list_alias.close()
     #if [True for a in text_content if url in a]:
     #if text_content.count(url) > 0: or if url_passed in text_content; neither work because any comparison
     # operation between string/bool to a list is always 0 or false
     for string in text_content:
         if url in string:
-            print(f"This is the downloaded.txt file location (true): {download_txt_file_path} and its absolute path: {os.path.abspath(download_txt_file_path)}")
+            # print(f"This is the downloaded.txt file location (true): {download_txt_file_path} and its absolute path: {os.path.abspath(download_txt_file_path)}")
             print(f"this is the url that matched in the text file {url} and {string}")
             return True
-    print(f"This is the downloaded.txt file location (true): {download_txt_file_path} and its absolute path: {os.path.abspath(download_txt_file_path)}")
+    # print(f"This is the downloaded.txt file location (true): {download_txt_file_path} and its absolute path: {os.path.abspath(download_txt_file_path)}")
     return False
 
 def containsDuplicate(nums):
@@ -85,34 +87,38 @@ def move_file_function(readmes_folder_path: str, file_name: str) -> None:
         If 2) and 3) Move file to arga6 if arg6 has no dupes, else move to arg4
 
     """
-    arg_6 = sys.argv[6].split('\\')
+    if main.is_executable():
+        arg_6 = sys.argv[6].split('\\')
     text_file_name = file_name.replace(os.sep, '/').split('/')[-1]
     destination_path = ""
     single_file_path = ""
+    if not gv.global_flags['--torrent-dir']:
+        if main.is_executable() and sys.argv[6] == "": # is a "single file" w/ no subfolder so create one
+            destination_path = sys.argv[5][:-sys.argv[5][::-1].index('.') - 1].replace(os.sep, '/') # backwards negative slice index minus one for before '.'
+            single_file_path = sys.argv[5].replace(os.sep, '/') # folder name of folder to create
 
-    if sys.argv[6] == "": # is a "single file" w/ no subfolder so create one
-        destination_path = sys.argv[5][:-sys.argv[5][::-1].index('.') - 1].replace(os.sep, '/') # backwards negative slice index minus one for before '.'
-        single_file_path = sys.argv[5].replace(os.sep, '/') # folder name of folder to create
-
-        # print('is a "single file" w/ no subfolder so create one')
-        # print('media file path: '+ media_file_path)
-        # print('destination_path: ' + destination_path)
-        # print('text file path: ' + "{}/{}".format(readmes_folder_path, text_file_name))
-        # print('destination_path: ' + destination_path)
-    elif not containsDuplicate(arg_6): # is a "single file" with a created subfolder from qbittorrent
-        destination_path = sys.argv[6].replace(os.sep, '/')
-        # print('is a "single file" w/ subfolder')
-        # print('text file path: ' + "{}/{}".format(readmes_folder_path, text_file_name))
-        # print('destination_path: ' + destination_path)
-    elif containsDuplicate(arg_6):
-        destination_path = sys.argv[4].replace(os.sep, '/')
-        # print('is folder')
-        # print('text file path: ' + "{}/{}".format(readmes_folder_path, text_file_name))
-        # print('destination_path: ' + destination_path)
+            # print('is a "single file" w/ no subfolder so create one')
+            # print('media file path: '+ media_file_path)
+            # print('destination_path: ' + destination_path)
+            # print('text file path: ' + "{}/{}".format(readmes_folder_path, text_file_name))
+            # print('destination_path: ' + destination_path)
+        elif main.is_executable() and not containsDuplicate(arg_6): # is a "single file" with a created subfolder from qbittorrent
+            destination_path = sys.argv[6].replace(os.sep, '/')
+            # print('is a "single file" w/ subfolder')
+            # print('text file path: ' + "{}/{}".format(readmes_folder_path, text_file_name))
+            # print('destination_path: ' + destination_path)
+        elif main.is_executable() and containsDuplicate(arg_6):
+            destination_path = sys.argv[4].replace(os.sep, '/')
+            # print('is folder')
+            # print('text file path: ' + "{}/{}".format(readmes_folder_path, text_file_name))
+            # print('destination_path: ' + destination_path)
+    else:
+        # print("torrentdir_fullpath = ", gv.torrentdir_fullpath)
+        destination_path = gv.torrentdir_fullpath
 
     # validate destination path length
     try:
-        if len(destination_path) > 256 - len(single_file_path):
+        if len(destination_path) + len(single_file_path) > 256:
             raise Exception("Destination path is too long. Try something less than 256.")
         if len(single_file_path) != 0:
             os.makedirs(destination_path)  # create new folder
@@ -140,44 +146,49 @@ def move_file_function(readmes_folder_path: str, file_name: str) -> None:
     return None
 
 def write_function(trunked_title: str, body_text_html: bs4.BeautifulSoup, url_passed: str, title: str, file_title: str, soup: bs4.BeautifulSoup) -> None:
+    # print("write functions global flags", gv.global_flags)
     extra_title = ""
-    if "nyaa" in url_passed and not "cache" in url_passed:
+    if gv.open_sites[0] in url_passed and not gv.open_sites[1] in url_passed:
         body_text_string = body_text_html.get_text(separator="\n\n") # work done in find_content function
-    elif "nyaa" in url_passed and "cache" in url_passed:
+    elif gv.open_sites[0] in url_passed and gv.open_sites[1] in url_passed:
         body_text_string = body_text_html # work done in find_content function
     else:
         body_text_string = body_text_html.get_text(separator="\n", strip=True)
-    # flag handling
-    if global_flags['--write-new'] or global_flags['--update']:
-        if "nyaa" in url_passed:
+
+    # write-affecting flag handling
+    if gv.global_flags['--write-new'] or gv.global_flags['--update']:
+        if gv.open_sites[0] in url_passed:
+            # print("--write-new or --update flag is true")
             pattern = re.sub(r'([\[\]])', r'[\1]', readmes_folder_path + trunked_title + extra_title) + "*.txt"
             result = glob.glob(pattern)
             new_version = len(result)
-            old_name = readmes_folder_path + trunked_title + extra_title + ".txt"
-            new_name = readmes_folder_path + trunked_title + extra_title + "v" + str(new_version) + ".txt"
+            old_name_path = readmes_folder_path + trunked_title + extra_title + ".txt"
+            new_name_path = readmes_folder_path + trunked_title + extra_title + "v" + str(new_version) + ".txt"
         else:
+            # print("--write-new or --update flag is true")
             pattern = re.sub(r'([\[\]])', r'[\1]', (readmes_folder_path + trunked_title + extra_title)) + "*.txt"
             result = glob.glob(pattern)
             # the new version number is just the length of the list returned by glob
             new_version = len(result)
             # the old name is the current name
-            old_name = readmes_folder_path + trunked_title + extra_title + ".txt"
+            old_name_path = readmes_folder_path + trunked_title + extra_title + ".txt"
             # the new name is the file name with v literal and the version number added
             # python quirk: if you add an int at the end, python expects ints for subsequent concats
-            new_name = readmes_folder_path + trunked_title + extra_title + "v" + str(new_version) + ".txt"
+            new_name_path = readmes_folder_path + trunked_title + extra_title + "v" + str(new_version) + ".txt"
         try:
             # use the os module to rename the file from old to new
-            os.rename(old_name, new_name)
+            os.rename(old_name_path, new_name_path)
         except FileNotFoundError as e:
             print("Warning: ", e, end="")
             print("\nWriting a new file")
         except WindowsError as e:
-            print("Warning:", e, "for", url_passed, "exiting", end="")
+            print("Warning:", e, "for", url_passed, "exiting", end=" ")
             exit()
         except:
-            print("An unexpected error occurred for " + url_passed + " exiting")
+            print("An unexpected error occurred for " + url_passed + " exiting", end=" ")
             exit()
-    if "nyaa" in url_passed and not "cache" in url_passed:
+
+    if gv.open_sites[0] in url_passed and not "cache.animetosho" in url_passed:
         # scrape ALL comments
         nyaa_comments_string = "COMMENTS:\n"
         # find consistent patterns in order to find relevant html elements we can extract our data from
@@ -193,13 +204,13 @@ def write_function(trunked_title: str, body_text_html: bs4.BeautifulSoup, url_pa
                 comment.find("div", class_="comment-content").blockquote.extract() # delete the tag and its contents to avoid dupe
             user_comment = comment.find("div", class_="comment-content").get_text().strip()
             nyaa_comments_string += user_comment + "\n\n"
-        print(f"This is the readmes_folder_path: {readmes_folder_path}")
-        print(f"This is the absolute readmes_folder_path: {os.path.abspath(readmes_folder_path)}")
+        # print(f"This is the readmes_folder_path: {readmes_folder_path}")
+        # print(f"This is the absolute readmes_folder_path: {os.path.abspath(readmes_folder_path)}")
         f = open(readmes_folder_path + '/' + trunked_title + extra_title + ".txt", "x", encoding="utf-8")
         f.write(title + "\n" + body_text_string + "\n" + url_passed + "\n\n" + nyaa_comments_string)
     else:
-        print(f"This is the readmes_folder_path: {readmes_folder_path}")
-        print(f"This is the absolute readmes_folder_path: {os.path.abspath(readmes_folder_path)}")
+        # print(f"This is the readmes_folder_path: {readmes_folder_path}")
+        # print(f"This is the absolute readmes_folder_path: {os.path.abspath(readmes_folder_path)}")
         f = open(readmes_folder_path + '/' + trunked_title + extra_title + ".txt", "x", encoding="utf-8")
         f.write(trunked_title + "\n\n" + body_text_string + "\n\n" + url_passed)
     # f.write("%G sys.argv[1] " + sys.argv[1] + "\n")
@@ -213,20 +224,22 @@ def write_function(trunked_title: str, body_text_html: bs4.BeautifulSoup, url_pa
 
     # flag handling
     # if there is "no list" flag and no "update" flag and it isn't on the list, add it to the list
-    if not global_flags['--no-list'] and not global_flags['--update'] and not is_downloaded(str(url_passed)):
+    if not gv.global_flags['--no-list'] and not gv.global_flags['--update'] and not is_downloaded(str(url_passed)):
         print("Adding to downloaded.txt")
-        downloaded_list_alias = open(download_txt_file_path, 'a+', encoding="utf-8")  # https://www.geeksforgeeks.org/python-append-to-a-file/
+        downloaded_list_alias = open(download_txt_file_path, 'a+', encoding="utf-8")
         downloaded_list_alias.write(title + ' ' + url_passed + '\n')
         downloaded_list_alias.close()
     # if "update" flag is on and it's not on the list, add it to the list
-    elif global_flags['--update'] and not is_downloaded(str(url_passed)):
+    elif gv.global_flags['--update'] and not is_downloaded(str(url_passed)):
         print("Adding to downloaded.txt")
-        downloaded_list_alias = open(download_txt_file_path, 'a+', encoding="utf-8") # https://www.geeksforgeeks.org/python-append-to-a-file/
+        downloaded_list_alias = open(download_txt_file_path, 'a+', encoding="utf-8")
         downloaded_list_alias.write(title + ' ' + url_passed + '\n')
         downloaded_list_alias.close()
 
-    if global_flags.get('--no-list') is False and global_flags.get('--write-new') is False and global_flags.get('--update') is False and is_executable():
-        print("Calling move function")
+    if gv.global_flags.get('--no-list') is False and gv.global_flags.get('--write-new') is False and gv.global_flags.get('--update') is False and main.is_executable():
+        # print("Calling move function")
+        move_file_function(readmes_folder_path, trunked_title + extra_title + ".txt")
+    elif not main.is_executable():
         move_file_function(readmes_folder_path, trunked_title + extra_title + ".txt")
     return None
 

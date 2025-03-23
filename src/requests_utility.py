@@ -1,12 +1,13 @@
-from scrape import *
+from scrape import find_content
 import requests
 from bs4 import BeautifulSoup
+import global_variables as gv
 
 # print() and type() are very useful in debugging
 def request_function(url_passed: str) -> None:
-    open_sites = ['nyaa', 'cache']
+
     resp = ""
-    open_sites_list = [True for keyword in open_sites if keyword in url_passed]
+    open_sites_list = [True for keyword in gv.open_sites if keyword in url_passed]
     print(open_sites_list)
     if True in open_sites_list:
         resp = requests.get(url_passed)

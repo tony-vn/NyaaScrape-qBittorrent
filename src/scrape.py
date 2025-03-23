@@ -1,13 +1,15 @@
+import textwrap
+import bs4
+import numpy
 import pandas as pd
 from tabulate import tabulate
-import textwrap
-from requests_utility import *
-import numpy
+import main
+import sys
 import re
-from main import load_js
-from bs4 import BeautifulSoup
-from os_utility import *
-import bs4
+import os
+from os_utility import truncate_title
+from os_utility import write_function
+import global_variables as gv
 
 # i can longer follow it after adding the outer (third) loop because of *args
 def remove_whitespace_in_tags(*html_things: bs4.element.Tag | bs4.element.NavigableString | bs4.ResultSet) -> None:
@@ -31,8 +33,8 @@ def find_content(url_passed: str, soup: bs4.BeautifulSoup):
     title = ""
     col_num = 0
 
-    if "nyaa" in url_passed and not "cache" in url_passed:
-        soup = load_js(url_passed)
+    if gv.open_sites[0] in url_passed in url_passed:
+        soup = main.load_js(url_passed)
         for tag in soup.findAll("hr"):
             tag.decompose()
         for tag in soup.findAll("img"):
@@ -164,16 +166,35 @@ def find_content(url_passed: str, soup: bs4.BeautifulSoup):
             a.extract()
         extra_text.smooth() # because we appended, it's in a list if we don't smooth()
         extra_text.string = extra_text.string[:-1] # remove last \n
-        print(extra_text.string)
+        # (extra_text.string)
         extra_text.string = re.sub(r'^', r'\n', extra_text.string) # ^ match start of string
         body_text = soup.find("div", attrs={'id': 'torrent-description'})
         extra_text.append(body_text)
         body_text = extra_text
         remove_whitespace_in_tags(body_text)
 
-
-    elif "cache" in url_passed and "nyaa" in url_passed:
-        soup = load_js(url_passed)
+        if gv.global_flags['--torrent-dir']:
+            # print("In scrape, in condition where --torrent-dir cond. is true")
+            # assumptions: all multifile torrents (series) are contained within a folder,  and all single files (movies) are not
+            # if a multifile torrent does not have a folder, use the name of the first file as the folder name
+            if soup.find("div", {'class': 'torrent-file-list panel-body'}).findAll("li")[0].find("a", {'class': 'folder'}):
+                foldername = soup.find("div", {'class': 'torrent-file-list panel-body'}).findAll("li")[0].find("a", {'class': 'folder'}).get_text()
+                # print("This is the foldername from folder", foldername)
+                foldername = foldername[:-3] # strange " ()" appended
+            else:
+                filename = soup.find("div", {'class': 'torrent-file-list panel-body'}).findAll("li")[0].get_text()
+                foldername = filename[:filename.rindex('(')-5] # 3 extension, 2 space and dot
+                # print("This is the foldername from a single file", foldername)
+            # assign the user specified path associated with the flag to the variable
+            for i in range(0, len(sys.argv)):
+                if sys.argv[i].lower() == '--torrent-dir' and os.path.isdir(sys.argv[i+1]):
+                    gv.torrentdir_fullpath = sys.argv[i+1]
+                    gv.torrentdir_fullpath = gv.torrentdir_fullpath + "\\{}".format(foldername)
+                    gv.torrentdir_fullpath = gv.torrentdir_fullpath.replace(os.sep, '/')
+                    # print("This is the torrentdir_fullpath in scrape", gv.torrentdir_fullpath)
+                    break
+    elif gv.open_sites[1] in url_passed:
+        soup = main.load_js(url_passed)
 
         title_text = soup.find("h1", {"id": "entry_title"})
         cleaned_title = title_text.get_text().strip().translate({ord(a): None for a in '\/:*?"<>|'})

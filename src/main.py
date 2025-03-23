@@ -3,14 +3,13 @@ import sys
 import bs4
 from bs4 import BeautifulSoup
 from requests_utility import *
+from os_utility import is_downloaded
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import undetected_chromedriver as uc
-from webdriver_manager.chrome import ChromeDriverManager
+import global_variables as gv
 
 arguments_cleaned = [arg for arg in sys.argv[1:] if not arg.startswith('--')]  # remove flags
-
-global_flags = {'--no-list': False, '--write-new': False, '--update': False}
 
 headers = {
     'Accept': '*/*',
@@ -41,23 +40,22 @@ def is_executable():
     # print("sys.argv[5] = " + sys.argv[5])
     # print("sys.argv[6] = " + sys.argv[6])
     # check if the program is being used as an executable
-    print("len(arguments_cleaned) = " + str(len(arguments_cleaned)))
-    if len(arguments_cleaned) != 6 and '.py' in sys.argv[0][-2:]:  # gindfr
-        print("is_executable = False")
-        return False
-    elif len(arguments_cleaned) == 6 or not '.py' in sys.argv[0]: # check that the six arguments are consistent with gindfr
+    # print("len(arguments_cleaned) = " + str(len(arguments_cleaned)))
+    if '.py' in sys.argv[0][-3:]: # check that the six arguments are consistent with gindfr
         # if len(arguments_cleaned[1]) == 40 and arguments_cleaned[1].isalnum() and '/' in arg[] or '\\' in arg:
             # return True
-        print("is_executable = True")
-        return True
+        # print("is_executable = True")
+        return False
+    # print("is_executable = False")
+    return True
 
 def find_url(infohash):
-    print("testing, this is the infohash for the script version: " + infohash)
+    # print("testing, this is the infohash for the script version: " + infohash)
     # 3 attempts at finding the nyaa url: 1) animetosho; 2) google search result page 1; 3) nyaa
     url = ""
-    if not 'nyaa.si' in url:
+    if not gv.open_sites[0] in url:
         found_nyaa = False
-        print("trying animetosho \n")
+        print("Trying animetosho")
         url = "https://animetosho.org/view/{string}".format(string=infohash)  # use animetosho search algorithm
         response = requests.get(url)
         if response.history:
@@ -73,7 +71,7 @@ def find_url(infohash):
                 first_links = [link.get("href") for link in
                                soup.find_all('a')]  # calling link['href'] errors if href is not defined in the tag
                 for link in first_links:
-                    if link is not None and 'nyaa.si' in link:  # short circ eval in case of a value from get(key) returns none
+                    if link is not None and gv.open_sites[0] in link:  # short circ eval in case of a value from get(key) returns none
                         found_nyaa = True
                         url = link
                         break
@@ -83,14 +81,14 @@ def find_url(infohash):
                         print("404 nyaa.si page through animetosho")
                         first_links2 = [link.get("href") for link in soup.find_all('a')]
                         for i in range(0, len(first_links2)):
-                            if "cache" in first_links2[i]:
+                            if gv.open_sites[1] in first_links2[i]:
                                 url = first_links2[i]
                                 break
                 print(url)
             else:
                 url = ""
-    if not 'nyaa.si' in url and not 'cache' in url or requests.get(url, headers).status_code == 404:
-        print("trying google search \n")
+    if (not gv.open_sites[0] in url and not gv.open_sites[1] in url) or requests.get(url, headers).status_code == 404:
+        print("Trying google search \n")
         url = "https://www.google.com/search?q={string}&sca_upv=1&uact=5".format(string=infohash)
         content = requests.get(url, headers=headers)
         soup = BeautifulSoup(content.text, "html.parser")
@@ -98,13 +96,13 @@ def find_url(infohash):
         if page is not None:
             first_links = [link['href'] for link in page.find_all('a')]
             for link in first_links:
-                if 'nyaa.si' in link:
+                if gv.open_sites[0] in link:
                     url = link
                     break
         else:
             print("Google page is NoneType\n")
-    if not 'nyaa.si' in url and not 'cache' in url or requests.get(url, headers).status_code == 404:
-        print("trying nyaa search\n")
+    if not gv.open_sites[0] in url and not gv.open_sites[1] in url or requests.get(url, headers).status_code == 404:
+        print("Trying Nyaa search\n")
         url = "https://nyaa.si/?f=0&c=0_0&q={string}".format(string=infohash)
         response = requests.get(url)
         if response.history:
@@ -122,28 +120,30 @@ def find_url(infohash):
         print("URL not found\nEnding program or going next\n")
         # sys.exit(0)
     # flags
-    if not is_downloaded(str(url)):  # will execute (download) for flags --no-list or --update if it isn't already on list
+    if not is_downloaded(str(url)):  # will execute (download) for flags --no-list or --update if it isn't already on list i.e. not downloaded so make request
         print("Requesting URL: " + str(url))
         request_function(str(url))
-    elif global_flags['--update'] or global_flags['--no-list']:  # ignore list
+    elif gv.global_flags['--update'] or gv.global_flags['--no-list']:  # ignore list, make request
         request_function(str(url))
     else:
         print("Already downloaded, skipping: " + url)
 
 # --update: if on list, don't add to list, and write new text file; else add to list and write new text file
 def main():
+    # add flags
     flags = []
     for element in sys.argv[1:]:
         if element[0:2] == '--':
             flags.append(element[:].lower())
-    # global flags are available flag options defined far above
-    for global_flag in global_flags:
-        for flag in flags:
-            if global_flag == flag:
-                global_flags[global_flag] = True
+    # print(flags)
+    # set flags to true
+    for flag in flags: # set flags to true
+        if gv.global_flags.get(flag) is False:
+            gv.global_flags[flag] = True
+    # print(gv.global_flags)
     # this needs a rework with new argument changes
     # for arg in sys.argv[1:len(sys.argv)-len(flags)]: # don't treat options as urls
-    if not is_executable():
+    if not is_executable() and not gv.global_flags['--infohash']:
         for i in range(1, len(sys.argv)):
             if sys.argv[i][0:2] != '--' and sys.argv[i].isalnum() and len(sys.argv[i]) == 40: # process argument only if it is not a flag (infohash)
                 infohash = sys.argv[i]
@@ -151,7 +151,21 @@ def main():
                 find_url(infohash)
             else:
                 print(sys.argv[i] + " is not an infohash. Skipping.")
-    else:
+    elif not is_executable() and gv.global_flags['--infohash']:
+        try:
+            infohash_textfile = open("infohash.txt", "r")
+            for infohash in infohash_textfile:
+                find_url(infohash)
+            infohash_textfile.close()
+        except FileNotFoundError as e:
+            print(e)
+            try:
+                print("Creating empty infohash file")
+                infohash_textfile = open("infohash.txt", "x")
+                exit()
+            except Exception as e:
+                print(e)
+    elif is_executable():
         infohash = sys.argv[2]
         find_url(infohash)
 
