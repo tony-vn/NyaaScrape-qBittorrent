@@ -12,7 +12,7 @@ NyaaScrape-qBittorrent is a Python-based tool that saves the information of a **
 - Saves downloaded torrents in `downloaded.txt`.
 - Available as an **executable** and an **open-source Python script(s)**.
 - <ins>**NEW:**</ins> Scrape the Nyaa pages of torrents already downloaded (script only)
-- <ins>**NEW:**</ins> Download Nyaa pages
+- <ins>**NEW:**</ins> Download Nyaa pages from infohashes in a text file (script only)
 
 ## :book: Description:
 A script packaged into an executable that scrapes the download page of [Nyaa.si](https://nyaa.si/), extracts information from the page, and writes it to a text file saved in the same location as the downloaded file. The script/executable first attempts to scrape the Nyaa pages. If that is unavailable, it falls back to scraping the cached Nyaa page through **AnimeTosho.** 
