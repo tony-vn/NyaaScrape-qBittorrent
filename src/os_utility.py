@@ -17,20 +17,20 @@ exe_dir = os.path.dirname(exe_path)
 download_txt_file_path = exe_dir + "\\downloaded.txt"
 download_txt_file_path = download_txt_file_path.replace(os.sep, '/')
 
-readmes_folder_path = exe_dir + "\\readmes\\"
+readmes_folder_path = exe_dir + "\\readmes"
 readmes_folder_path = readmes_folder_path.replace(os.sep, '/')
 
 # make file if it does not exist
 if not os.path.exists(readmes_folder_path):
     try:
-        if len(readmes_folder_path) + len("\\readmes") > 256:
+        if len(readmes_folder_path) > 256:
             raise Exception("Readmes path is too long. Path you've placed the executable or scripts in is too long. Try something less than 256.")
         os.makedirs(readmes_folder_path)
     except Exception as e:
         print(e)
 if not os.path.exists(download_txt_file_path):
     try:
-        if len(download_txt_file_path) + len("\\downloaded.txt") > 256:
+        if len(download_txt_file_path) > 256:
             raise Exception("Downloaded.txt path is too long. Path you've placed the executable or scripts in is too long. Try something less than 256.")
         downloaded_list = open(download_txt_file_path, 'x', encoding="utf-8")
         downloaded_list.close()
@@ -78,8 +78,8 @@ def move_file_function(readmes_folder_path: str, file_name: str) -> None:
     2 %I is the infohash
     3 %N is just the torrent name only, no path or anything else
     4 %D is the path holding the downloaded file
-    5 %F is the path to the singular file (unsure for multipart torrent file)
-    6 %R is the subfolder path created from selecting the option in qbittorrent
+    5 %F is the path to the singular file (unsure for multipart torrent file) -> may contain dupe in path name
+    6 %R is the subfolder path created from selecting the option in qbittorrent -> may contain dupe in path name
 
     DETERMINING THESE 3 CASES: 1) single file, no subfolder user choice; 2) single file, yes subfolder user choice; 3) is a folder
     Diff b/w 1) and 2) is the existence of file ext at arg3
@@ -88,21 +88,22 @@ def move_file_function(readmes_folder_path: str, file_name: str) -> None:
 
     """
     if main.is_executable():
-        arg_6 = sys.argv[6].split('\\')
+        arg_6 = sys.argv[6].replace(os.sep, "/").split('/')
     text_file_name = file_name.replace(os.sep, '/').split('/')[-1]
     destination_path = ""
     single_file_path = ""
     if not gv.global_flags['--torrent-dir']:
         if main.is_executable() and sys.argv[6] == "": # is a "single file" w/ no subfolder so create one
-            destination_path = sys.argv[5][:-sys.argv[5][::-1].index('.') - 1].replace(os.sep, '/') # backwards negative slice index minus one for before '.'
-            single_file_path = sys.argv[5].replace(os.sep, '/') # folder name of folder to create
+            # arg5 instead of arg4 since we cannot assume torrent name always equals to filename
+            destination_path = sys.argv[5][:sys.argv[5].rindex('.')].replace(os.sep, '/') # get path of file w/o ext
+            single_file_path = sys.argv[5].replace(os.sep, '/') # path to singular file
 
             # print('is a "single file" w/ no subfolder so create one')
             # print('media file path: '+ media_file_path)
             # print('destination_path: ' + destination_path)
             # print('text file path: ' + "{}/{}".format(readmes_folder_path, text_file_name))
             # print('destination_path: ' + destination_path)
-        elif main.is_executable() and not containsDuplicate(arg_6): # is a "single file" with a created subfolder from qbittorrent
+        elif main.is_executable() and not containsDuplicate(arg_6): # is a single file with selected "create subfolder from qbittorrent"; dupes because sys.argv[6] creates <path>\folder1\folder1
             destination_path = sys.argv[6].replace(os.sep, '/')
             # print('is a "single file" w/ subfolder')
             # print('text file path: ' + "{}/{}".format(readmes_folder_path, text_file_name))
@@ -118,7 +119,8 @@ def move_file_function(readmes_folder_path: str, file_name: str) -> None:
 
     # validate destination path length
     try:
-        if len(destination_path) + len(single_file_path) > 256:
+        foldername_no_path = destination_path[destination_path.rindex('/')+1:]
+        if len(destination_path) + len(foldername_no_path) > 256:
             raise Exception("Destination path is too long. Try something less than 256.")
         if len(single_file_path) != 0:
             os.makedirs(destination_path)  # create new folder
