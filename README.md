@@ -53,7 +53,7 @@ Additionally, several flags are available:
 ##### General:
 `python main.py <flags> <infohash_here>`
 ##### Specific:
-`python main.py --update 5812b0b5b57f4c4bc814e4ad40a628dd9176d533`<BR>
+`python main.py --update 5812b0b5b57f4c4bc814e4ad40a628dd9176d533`<BR><BR>
 `python main.py --torrent-dir "I:\Anime" --update --infohash`
 <BR><BR>
 
