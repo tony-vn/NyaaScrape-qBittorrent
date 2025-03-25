@@ -24,6 +24,7 @@ What **information** does this executable scrape?
 - Submitter
 - File Size
 - Number of Completes
+- Info hash
 - Description
 - URL of the page
 - All comments
