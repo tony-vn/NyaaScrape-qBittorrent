@@ -50,7 +50,8 @@ def is_downloaded(url: str) -> bool:
     for string in text_content:
         if url in string:
             # print(f"This is the downloaded.txt file location (true): {download_txt_file_path} and its absolute path: {os.path.abspath(download_txt_file_path)}")
-            print(f"this is the url that matched in the text file {url} and {string}")
+            if gv.global_flags['--verbose']:
+                print(f"This is the url that matched in the text file {url} and {string}")
             return True
     # print(f"This is the downloaded.txt file location (true): {download_txt_file_path} and its absolute path: {os.path.abspath(download_txt_file_path)}")
     return False
@@ -209,12 +210,13 @@ def write_function(trunked_title: str, body_text_html: bs4.BeautifulSoup, url_pa
         # print(f"This is the readmes_folder_path: {readmes_folder_path}")
         # print(f"This is the absolute readmes_folder_path: {os.path.abspath(readmes_folder_path)}")
         f = open(readmes_folder_path + '/' + trunked_title + extra_title + ".txt", "x", encoding="utf-8")
-        f.write(title + "\n" + body_text_string + "\n" + url_passed + "\n\n" + nyaa_comments_string)
+        # print(repr(body_text_string))
+        f.write(title + " ({})".format(url_passed) + "\n" + body_text_string + "\n\n" + nyaa_comments_string)
     else:
         # print(f"This is the readmes_folder_path: {readmes_folder_path}")
         # print(f"This is the absolute readmes_folder_path: {os.path.abspath(readmes_folder_path)}")
         f = open(readmes_folder_path + '/' + trunked_title + extra_title + ".txt", "x", encoding="utf-8")
-        f.write(trunked_title + "\n\n" + body_text_string + "\n\n" + url_passed)
+        f.write(trunked_title + " ({})".format(url_passed) + "\n\n" + body_text_string)
     # f.write("%G sys.argv[1] " + sys.argv[1] + "\n")
     # f.write("%I sys.argv[2] " + sys.argv[2] + "\n")
     # f.write("%N sys.argv[3] " + sys.argv[3] + "\n")
@@ -224,18 +226,20 @@ def write_function(trunked_title: str, body_text_html: bs4.BeautifulSoup, url_pa
     f.close()
     print('SUCCESS! ' + trunked_title + " " + url_passed + ' DONE!')
 
+    infohash_text = re.search(r"Info hash: [a-zA-Z0-9]+", body_text_string).group()
+    infohash_text = infohash_text[infohash_text.rindex(' ')+1:]
     # flag handling
     # if there is "no list" flag and no "update" flag and it isn't on the list, add it to the list
     if not gv.global_flags['--no-list'] and not gv.global_flags['--update'] and not is_downloaded(str(url_passed)):
         print("Adding to downloaded.txt")
         downloaded_list_alias = open(download_txt_file_path, 'a+', encoding="utf-8")
-        downloaded_list_alias.write(title + ' ' + url_passed + '\n')
+        downloaded_list_alias.write(title + ' ' + url_passed + ' ' + infohash_text + '\n')
         downloaded_list_alias.close()
-    # if "update" flag is on and it's not on the list, add it to the list
+    # if "update" flag is on, and it's not on the list, add it to the list
     elif gv.global_flags['--update'] and not is_downloaded(str(url_passed)):
         print("Adding to downloaded.txt")
         downloaded_list_alias = open(download_txt_file_path, 'a+', encoding="utf-8")
-        downloaded_list_alias.write(title + ' ' + url_passed + '\n')
+        downloaded_list_alias.write(title + ' ' + url_passed + ' ' + infohash_text + '\n')
         downloaded_list_alias.close()
 
     if gv.global_flags.get('--no-list') is False and gv.global_flags.get('--write-new') is False and gv.global_flags.get('--update') is False and main.is_executable():

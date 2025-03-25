@@ -55,15 +55,18 @@ def find_url(infohash):
     url = ""
     if not gv.open_sites[0] in url:
         found_nyaa = False
-        print("Trying animetosho")
+        print("Trying AnimeTosho")
         url = "https://animetosho.org/view/{string}".format(string=infohash)  # use animetosho search algorithm
         response = requests.get(url)
         if response.history:
-            print("Request redirected")
+            if gv.global_flags['--verbose']:
+                print("Request redirected")
             for resp in response.history:
-                print(resp.status_code, resp.url)
-            print("Final destination: ")  # reached the end of redirects
-            print(response.status_code, response.url)
+                if gv.global_flags['--verbose']:
+                    print(resp.status_code, resp.url)
+            if gv.global_flags['--verbose']:
+                print("Final destination: ")  # reached the end of redirects
+                print(response.status_code, response.url)
             if response.status_code == 200:
                 url = response.url
                 content = requests.get(url, headers)
@@ -78,17 +81,17 @@ def find_url(infohash):
                 if found_nyaa:
                     check_nyaa_resp = requests.get(link)  # check if the original nyaa page is still up
                     if check_nyaa_resp.status_code == 404:  # not up, get cache page
-                        print("404 nyaa.si page through animetosho")
+                        print("404 nyaa.si page through AnimeTosho")
                         first_links2 = [link.get("href") for link in soup.find_all('a')]
                         for i in range(0, len(first_links2)):
                             if gv.open_sites[1] in first_links2[i]:
                                 url = first_links2[i]
                                 break
-                print(url)
+                # print(url)
             else:
                 url = ""
     if (not gv.open_sites[0] in url and not gv.open_sites[1] in url) or requests.get(url, headers).status_code == 404:
-        print("Trying google search \n")
+        print("Trying Google search \n")
         url = "https://www.google.com/search?q={string}&sca_upv=1&uact=5".format(string=infohash)
         content = requests.get(url, headers=headers)
         soup = BeautifulSoup(content.text, "html.parser")
@@ -117,7 +120,7 @@ def find_url(infohash):
             else:
                 url = ""
     if not url and not "https" in sys.argv[1]:  # if url was not passed as arg 1
-        print("URL not found\nEnding program or going next\n")
+        print("URL not found. Ending program or going next\n")
         # sys.exit(0)
     # flags
     if not is_downloaded(str(url)):  # will execute (download) for flags --no-list or --update if it isn't already on list i.e. not downloaded so make request
@@ -126,7 +129,7 @@ def find_url(infohash):
     elif gv.global_flags['--update'] or gv.global_flags['--no-list']:  # ignore list, make request
         request_function(str(url))
     else:
-        print("Already downloaded, skipping: " + url)
+        print("Already downloaded, skipping: " + url + "\n")
 
 # --update: if on list, don't add to list, and write new text file; else add to list and write new text file
 def main():
@@ -147,10 +150,11 @@ def main():
         for i in range(1, len(sys.argv)):
             if sys.argv[i][0:2] != '--' and sys.argv[i].isalnum() and len(sys.argv[i]) == 40: # process argument only if it is not a flag (infohash)
                 infohash = sys.argv[i]
-                print("This is an infohash: " + infohash)
+                if gv.global_flags['--verbose']:
+                    print("This is an infohash: " + infohash)
                 find_url(infohash)
-            else:
-                print(sys.argv[i] + " is not an infohash. Skipping.")
+            elif gv.global_flags['--verbose']:
+                print(sys.argv[i] + " is not an infohash. Skipping.\n")
     elif not is_executable() and gv.global_flags['--infohash']:
         try:
             infohash_textfile = open("infohash.txt", "r")

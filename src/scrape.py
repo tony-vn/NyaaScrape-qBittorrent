@@ -51,7 +51,7 @@ def find_content(url_passed: str, soup: bs4.BeautifulSoup):
         else:
             return -1
         for element in soup.findAll("a"):
-            element.append(" ({})".format(element.get('href'))) # call get() method to get attributes
+            element.append(" ({})".format(element.get('href'))) # call get() method to get attributes (preserve links here)
             element.smooth()
 
         for tag in soup.find("div", attrs={'id': 'torrent-description'}):
@@ -142,7 +142,7 @@ def find_content(url_passed: str, soup: bs4.BeautifulSoup):
         extra_text_initial2 = soup.findAll("div", {'class': 'col-md-5'}) # content
         # grabbed the second out of all the class=col-md-5 elements, which is the date
         # md-5: category, date, submitter, seeders, information, leechers, file size, completed
-        filtered_content_indices = [1, 2, 6, 7] #date, submitter, file size, completed
+        filtered_content_indices = [1, 2, 6, 7, 8] #date, submitter, file size, completed, infohash
         extra_text = bs4.element.Tag(None, None, 'p')
 
         remove_whitespace_in_tags(extra_text_initial2)
