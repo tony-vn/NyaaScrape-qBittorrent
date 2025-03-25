@@ -17,7 +17,7 @@ exe_dir = os.path.dirname(exe_path)
 download_txt_file_path = exe_dir + "\\downloaded.txt"
 download_txt_file_path = download_txt_file_path.replace(os.sep, '/')
 
-readmes_folder_path = exe_dir + "\\readmes"
+readmes_folder_path = exe_dir + "\\readmes\\"
 readmes_folder_path = readmes_folder_path.replace(os.sep, '/')
 
 # make file if it does not exist
@@ -129,23 +129,6 @@ def move_file_function(readmes_folder_path: str, file_name: str) -> None:
         shutil.move("{}/{}".format(readmes_folder_path, text_file_name), destination_path)  # move file
     except Exception as e:
         print(e)
-
-    # destination_path = sys.argv[6].replace(os.sep, '/')
-    # print("In move function, this is dest path 1 = " + destination_path)
-    # # check file extension on the various qbittorrent arguments
-    # if os.path.isdir(destination_path) and '.' in sys.argv[5] and 4 >= len(sys.argv[5][-sys.argv[5][::-1].index('.'):]) >= 3 or '.' in sys.argv[3] and 4 >= len(sys.argv[3][-sys.argv[3][::-1].index('.'):]) >= 3: # arg5 or 3 w/ file ext means single file
-    #     file_name = file_name.replace(os.sep, '/').split('/')[-1]
-    #     print("In a move condition true")
-    #     shutil.move("{}/{}".format(file_path, file_name), "{}/{}".format(destination_path, file_name))
-    #     print("Logging src path and destination path respectively: '{}' '{}'".format("{}/{}".format(file_path, file_name),"{}/{}".format(destination_path,file_name)))
-    #     return None
-    # elif '.' in sys.argv[3] and 4 >= len(sys.argv[3][-sys.argv[3][::-1].index('.'):]) >= 3:  # no subfolder case
-    #     destination_path = sys.argv[4].replace(os.sep, '/')
-    # elif '.' in sys.argv[5] and 4 >= len(sys.argv[5][-sys.argv[5][::-1].index('.'):]) >= 3:  # original content layout folder case
-    #     destination_path = sys.argv[5].replace(os.sep, '/')
-    # print("In move function, this is dest path 2 = " + destination_path)
-    # shutil.move("{}/{}".format(file_path, file_name), "{}/{}".format(destination_path, file_name))
-    # print("Logging src path and destination path respectively: '{}' '{}'".format("{}/{}".format(file_path, file_name),"{}/{}".format(destination_path,file_name)))
     return None
 
 def write_function(trunked_title: str, body_text_html: bs4.BeautifulSoup, url_passed: str, title: str, file_title: str, soup: bs4.BeautifulSoup) -> None:
@@ -180,7 +163,8 @@ def write_function(trunked_title: str, body_text_html: bs4.BeautifulSoup, url_pa
             new_name_path = readmes_folder_path + trunked_title + extra_title + "v" + str(new_version) + ".txt"
         try:
             # use the os module to rename the file from old to new
-            os.rename(old_name_path, new_name_path)
+            if not gv.global_flags['--write-new']:
+                os.rename(old_name_path, new_name_path)
         except FileNotFoundError as e:
             print("Warning: ", e, end="")
             print("\nWriting a new file")
@@ -249,23 +233,24 @@ def write_function(trunked_title: str, body_text_html: bs4.BeautifulSoup, url_pa
         move_file_function(readmes_folder_path, trunked_title + extra_title + ".txt")
     return None
 
-def truncate_title(cleaned_title: str, file_title: str) -> str:
+def truncate_title(cleaned_title: str, file_title: str) -> str: # cleaned_title is torrent title as it appears in nyaa list, file_title is title of file as it appears in contents list
     cleaned_title = cleaned_title.strip()
     # my solution to the max windows path length problem while still maintaining readability of tit
     trunked_title, word = "", ""
     open_brackets = False
     i = 0
-    if len(cleaned_title) * 2 + 38 <= 256:
+    if len(cleaned_title) * 2 + len(readmes_folder_path) <= 256: # multip. by 2 for assumed file in folder
         trunked_title = cleaned_title
     else:
         # Have cleaned_title reach same length as the file_title length
-        while i < len(cleaned_title) and len(trunked_title) <= (256 - len(file_title) - 38):
+        while i < len(cleaned_title) and len(trunked_title) * 2 <= 256: # multip. by 2 for assumed file in folder
             word += cleaned_title[i]
 
             # Add to trunked_title word-by-word. Word defined as ending in clos brackets or a space
             if cleaned_title[i] in '])】』' or cleaned_title[i] == ' ' and open_brackets is False:
-                trunked_title += word
-                word = ""
+                if (len(trunked_title) + len(word)) * 2 <= 256:
+                    trunked_title += word
+                    word = ""
             elif cleaned_title[i] in '[(『':
                 open_brackets = True
             i += 1
