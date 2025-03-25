@@ -43,7 +43,7 @@ The files will be saved in a folder located in the **same directory** as the scr
 <BR><BR>
 Additionally, several flags are available:
 - `--no-list`: scrapes the web page, ignoring downloaded.txt, but will do nothing if the file already exists in the readmes directory.
-- `--write-new`: scrapes the web page, records it in downloaded.txt if it isn't already in the fiel, and if another copy exists in readmes, it will rename.
+- `--write-new`: scrapes the web page, records it in downloaded.txt if it isn't already in the file, and if another copy exists in readmes, it will rename.
 - `--update`: scrapes web page, add to downloaded.txt, and renames file if another copy exists in readmes (probably what you want to use in most cases).
 - <ins>**NEW:**</ins> `--torrent-dir <directory>`: specify the location of where your downloaded torrent files are located and the script will scrape their web pages, automatically moving the text file to the location of their downloaded files.
   - `--infohash`: reads infohashes from infohash.txt located in the current script directory. One infohash per line. Meant to be used as an auxiliary flag for batch creation of text files for torrents already downloaded and existing on your drive.
