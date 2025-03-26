@@ -37,7 +37,7 @@ In the settings of qBittorrent: `Options -> Downloads -> Run external program ->
 <BR><BR>
 Check "Run on torrent finished", then add the line: `"path/to/executable/NyaaScrape-qBittorrent.exe" "%G" "%I" "%N" "%D" "%F" "%R"`
 ### Option B: Python Script
-When calling the script main.py (located in src folder), provide as arguments the **infohashes of the torrents**.
+When calling the script main.py (located in src folder), provide as arguments the **info hashes of the torrents (copy them through the torrent client if they're already there)**.
 <BR><BR>
 The files will be saved in a folder located in the **same directory** as the script called readmes.
 <BR><BR>
