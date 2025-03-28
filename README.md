@@ -56,7 +56,7 @@ Additionally, several flags are available:
 `python main.py --torrent-dir "I:\Anime" --update --infohash`
 <BR><BR>
 
-## :white_check_mark: Sample:
+## :tv: Sample:
   #### <ins>Input:</ins>
 <kbd>![InputHTMLPage](imgs/nyaa_table2.png)</kbd>
   #### <ins>Output:</ins>
