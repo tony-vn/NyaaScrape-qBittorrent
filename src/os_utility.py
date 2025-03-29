@@ -32,8 +32,8 @@ if not os.path.exists(download_txt_file_path):
     try:
         if len(download_txt_file_path) > 256:
             raise Exception("Downloaded.txt path is too long. Path you've placed the executable or scripts in is too long. Try something less than 256.")
-        downloaded_list = open(download_txt_file_path, 'x', encoding="utf-8")
-        downloaded_list.close()
+        with open(download_txt_file_path, 'x', encoding="utf-8") as downloaded_list:
+            downloaded_list.close()
     except Exception as e:
         print(e)
     
@@ -41,9 +41,8 @@ if not os.path.exists(download_txt_file_path):
 your os uses as separator for its path and replaces it with the char in the second argument'''
 
 def is_downloaded(url: str) -> bool:
-    downloaded_list_alias = open(download_txt_file_path, 'r', encoding="utf-8")
-    text_content = downloaded_list_alias.readlines()
-    downloaded_list_alias.close()
+    with open(download_txt_file_path, 'r', encoding="utf-8") as downloaded_list_alias:
+        text_content = downloaded_list_alias.readlines()
     #if [True for a in text_content if url in a]:
     #if text_content.count(url) > 0: or if url_passed in text_content; neither work because any comparison
     # operation between string/bool to a list is always 0 or false
@@ -193,21 +192,20 @@ def write_function(trunked_title: str, body_text_html: bs4.BeautifulSoup, url_pa
             nyaa_comments_string += user_comment + "\n\n"
         # print(f"This is the readmes_folder_path: {readmes_folder_path}")
         # print(f"This is the absolute readmes_folder_path: {os.path.abspath(readmes_folder_path)}")
-        f = open(readmes_folder_path + '/' + trunked_title + extra_title + ".txt", "x", encoding="utf-8")
-        # print(repr(body_text_string))
-        f.write(title + " ({})".format(url_passed) + "\n" + body_text_string + "\n\n" + nyaa_comments_string)
+        with open(readmes_folder_path + '/' + trunked_title + extra_title + ".txt", "x", encoding="utf-8") as f:
+            # print(repr(body_text_string))
+            f.write(title + " ({})".format(url_passed) + "\n" + body_text_string + "\n\n" + nyaa_comments_string)
     else:
         # print(f"This is the readmes_folder_path: {readmes_folder_path}")
         # print(f"This is the absolute readmes_folder_path: {os.path.abspath(readmes_folder_path)}")
-        f = open(readmes_folder_path + '/' + trunked_title + extra_title + ".txt", "x", encoding="utf-8")
-        f.write(trunked_title + " ({})".format(url_passed) + "\n\n" + body_text_string)
+        with open(readmes_folder_path + '/' + trunked_title + extra_title + ".txt", "x", encoding="utf-8") as f:
+            f.write(trunked_title + " ({})".format(url_passed) + "\n\n" + body_text_string)
     # f.write("%G sys.argv[1] " + sys.argv[1] + "\n")
     # f.write("%I sys.argv[2] " + sys.argv[2] + "\n")
     # f.write("%N sys.argv[3] " + sys.argv[3] + "\n")
     # f.write("%D sys.argv[4] " + sys.argv[4] + "\n")
     # f.write("%F sys.argv[5] " + sys.argv[5] + "\n")
     # f.write("%R sys.argv[6] " + sys.argv[6] + "\n")
-    f.close()
     print('SUCCESS! ' + trunked_title + " " + url_passed + ' DONE!')
 
     infohash_text = re.search(r"Info hash: [a-zA-Z0-9]+", body_text_string).group()
@@ -216,15 +214,13 @@ def write_function(trunked_title: str, body_text_html: bs4.BeautifulSoup, url_pa
     # if there is "no list" flag and no "update" flag and it isn't on the list, add it to the list
     if not gv.global_flags['--no-list'] and not gv.global_flags['--update'] and not is_downloaded(str(url_passed)):
         print("Adding to downloaded.txt")
-        downloaded_list_alias = open(download_txt_file_path, 'a+', encoding="utf-8")
-        downloaded_list_alias.write(title + ' ' + url_passed + ' ' + infohash_text + '\n')
-        downloaded_list_alias.close()
+        with open(download_txt_file_path, 'a+', encoding="utf-8") as downloaded_list_alias:
+            downloaded_list_alias.write(title + ' ' + url_passed + ' ' + infohash_text + '\n')
     # if "update" flag is on, and it's not on the list, add it to the list
     elif gv.global_flags['--update'] and not is_downloaded(str(url_passed)):
         print("Adding to downloaded.txt")
-        downloaded_list_alias = open(download_txt_file_path, 'a+', encoding="utf-8")
-        downloaded_list_alias.write(title + ' ' + url_passed + ' ' + infohash_text + '\n')
-        downloaded_list_alias.close()
+        with open(download_txt_file_path, 'a+', encoding="utf-8") as downloaded_list_alias:
+            downloaded_list_alias.write(title + ' ' + url_passed + ' ' + infohash_text + '\n')
 
     if gv.global_flags.get('--no-list') is False and gv.global_flags.get('--write-new') is False and gv.global_flags.get('--update') is False and main.is_executable():
         # print("Calling move function")

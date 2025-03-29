@@ -133,48 +133,49 @@ def find_url(infohash):
 
 # --update: if on list, don't add to list, and write new text file; else add to list and write new text file
 def main():
-    # add flags
-    flags = []
-    for element in sys.argv[1:]:
-        if element[0:2] == '--':
-            flags.append(element[:].lower())
-    # print(flags)
-    # set flags to true
-    for flag in flags: # set flags to true
-        if gv.global_flags.get(flag) is False:
-            gv.global_flags[flag] = True
-    # print(gv.global_flags)
-    # this needs a rework with new argument changes
-    # for arg in sys.argv[1:len(sys.argv)-len(flags)]: # don't treat options as urls
-    if not is_executable() and not gv.global_flags['--infohash']:
-        for i in range(1, len(sys.argv)):
-            if sys.argv[i][0:2] != '--' and sys.argv[i].isalnum() and len(sys.argv[i]) == 40: # process argument only if it is not a flag (infohash)
-                infohash = sys.argv[i]
-                if gv.global_flags['--verbose']:
-                    print("This is an infohash: " + infohash)
-                find_url(infohash)
-            elif gv.global_flags['--verbose']:
-                print(sys.argv[i] + " is not an infohash. Skipping.\n")
-    elif not is_executable() and gv.global_flags['--infohash']:
-        try:
-            infohash_textfile = open("infohash.txt", "r")
-            for infohash in infohash_textfile:
-                find_url(infohash)
-            infohash_textfile.close()
-        except FileNotFoundError as e:
-            print(e)
+    try:
+        # add flags
+        flags = []
+        for element in sys.argv[1:]:
+            if element[0:2] == '--':
+                flags.append(element[:].lower())
+        # print(flags)
+        # set flags to true
+        for flag in flags: # set flags to true
+            if gv.global_flags.get(flag) is False:
+                gv.global_flags[flag] = True
+        # print(gv.global_flags)
+        # this needs a rework with new argument changes
+        # for arg in sys.argv[1:len(sys.argv)-len(flags)]: # don't treat options as urls
+        if not is_executable() and not gv.global_flags['--infohash']:
+            for i in range(1, len(sys.argv)):
+                if sys.argv[i][0:2] != '--' and sys.argv[i].isalnum() and len(sys.argv[i]) == 40: # process argument only if it is not a flag (infohash)
+                    infohash = sys.argv[i]
+                    if gv.global_flags['--verbose']:
+                        print("This is an infohash: " + infohash)
+                    find_url(infohash)
+                elif gv.global_flags['--verbose']:
+                    print(sys.argv[i] + " is not an infohash. Skipping.\n")
+        elif not is_executable() and gv.global_flags['--infohash']:
             try:
-                print("Creating empty infohash file")
-                infohash_textfile = open("infohash.txt", "x")
-                exit()
-            except Exception as e:
+                infohash_textfile = open("infohash.txt", "r")
+                for infohash in infohash_textfile:
+                    find_url(infohash)
+                infohash_textfile.close()
+            except FileNotFoundError as e:
                 print(e)
-    elif is_executable():
-        infohash = sys.argv[2]
-        find_url(infohash)
-
-    driver.close()
-    driver.quit()
+                try:
+                    print("Creating empty infohash file")
+                    infohash_textfile = open("infohash.txt", "x")
+                    exit()
+                except Exception as e:
+                    print(e)
+        elif is_executable():
+            infohash = sys.argv[2]
+            find_url(infohash)
+    finally:
+        driver.close()
+        driver.quit()
     return 0
 
 
