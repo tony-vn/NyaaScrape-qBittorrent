@@ -1,5 +1,5 @@
 # NyaaScrape-qBittorrent
-[![Github All Releases](https://img.shields.io/github/downloads/tony-vn/NyaaScrape-qBittorrent/total.svg)]()
+[![Github All Releases](https://img.shields.io/github/downloads/tony-vn/NyaaScrape-qBittorrent/total.svg)](https://github.com/tony-vn/NyaaScrape-qBittorrent/releases)
 <!--********************************-->
 
 ## :pushpin: Overview:
