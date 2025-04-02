@@ -1,6 +1,6 @@
 # NyaaScrape-qBittorrent
 [![Github All Releases](https://img.shields.io/github/downloads/tony-vn/NyaaScrape-qBittorrent/total.svg)](https://github.com/tony-vn/NyaaScrape-qBittorrent/releases)
-![GitHub Repo stars](https://img.shields.io/github/stars/tony-vn/NyaaScrape-qBittorrent?style=flat)
+[![GitHub Repo stars](https://img.shields.io/github/stars/tony-vn/NyaaScrape-qBittorrent?style=flat)](https://github.com/tony-vn/NyaaScrape-qBittorrent/stargazers)
 <!--********************************-->
 
 ## :pushpin: Overview:
