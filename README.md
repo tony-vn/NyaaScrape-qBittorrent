@@ -75,8 +75,7 @@ Note to non-Windows users: the filenames of the generated text files are Windows
 - Add table parsing for cached animetosho pages like it exists for nyaa pages
 - Optimize and reduce executable file size
 - Refactor code
-- Add intuitive (less technical) customizability for end-users (e.g. allow users a way to specify scraping the same page twice without needing to delete the entry in the downloads.txt)
-- Non-Windows OS support
+- Non-Windows builds
 - Fix possible logical errors regarding flags
 - Integrate proper sentiment analysis to filter for useful, constructive comments
 
