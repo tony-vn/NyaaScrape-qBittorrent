@@ -119,6 +119,23 @@ def find_url(infohash):
                 print(url)
             else:
                 url = ""
+        else:
+            url = ""
+    if not gv.open_sites[0] in url and not gv.open_sites[1] in url or requests.get(url, headers).status_code == 404:
+        print("Trying Sukebei search\n")
+        url = "https://sukebei.nyaa.si/?f=0&c=0_0&q={string}".format(string=infohash)
+        response = requests.get(url)
+        if response.history:
+            print("Request redirected")
+            for resp in response.history:
+                print(resp.status_code, resp.url)  # print each redirect page status_code and its url
+            print("Final destination: ")  # reached the end of redirects
+            print(response.status_code, response.url)
+            if response.status_code == 200:  # final destination check
+                url = response.url
+                print(url)
+            else:
+                url = ""
     if not url and not "https" in sys.argv[1]:  # if url was not passed as arg 1
         print("URL not found. Ending program or going next\n")
         # sys.exit(0)
